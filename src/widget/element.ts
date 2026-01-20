@@ -102,6 +102,18 @@ export abstract class SKElement {
     return this._height;
   }
 
+  // for element tree hierarchy
+  private _parent: SKElement | null = null;
+
+  public get parent(): SKElement | null {
+    return this._parent;
+  }
+
+  // only SKContainers should call this
+  public _setParent(parent: SKElement | null): void {
+    this._parent = parent;
+  }
+
   //#region size and layout calculations
 
   // size calculation flag
@@ -124,8 +136,8 @@ export abstract class SKElement {
       console.log(
         `   content '${this.id}' -> ${sizeToString(
           this.contentWidth,
-          this.contentHeight
-        )}`
+          this.contentHeight,
+        )}`,
       );
   }
 
@@ -166,8 +178,8 @@ export abstract class SKElement {
       console.log(
         `1️⃣ measure '${this.id}' -> ${sizeToString(
           this.intrinsicWidth,
-          this.intrinsicHeight
-        )}`
+          this.intrinsicHeight,
+        )}`,
       );
   }
 
@@ -203,7 +215,7 @@ export abstract class SKElement {
   layout(width?: number, height?: number): Size {
     if (Settings.debugLayout)
       console.log(
-        `2️⃣ layout '${this.id}' in ${sizeToString(width, height)}`
+        `2️⃣ layout '${this.id}' in ${sizeToString(width, height)}`,
       );
 
     this._layoutWidth = width ?? this.intrinsicWidth;
@@ -281,7 +293,7 @@ export abstract class SKElement {
         this.margin,
         this.margin,
         this.paddingBox.width,
-        this.paddingBox.height
+        this.paddingBox.height,
       );
     }
 
@@ -292,7 +304,7 @@ export abstract class SKElement {
       this.margin + this.padding,
       this.margin + this.padding,
       this.contentBox.width,
-      this.contentBox.height
+      this.contentBox.height,
     );
 
     gc.restore();
@@ -317,7 +329,7 @@ export abstract class SKElement {
   addEventListener(
     type: string,
     handler: EventHandler,
-    capture = false
+    capture = false,
   ) {
     this.bindingTable.push({ type, handler, capture });
   }
@@ -325,7 +337,7 @@ export abstract class SKElement {
   removeEventListener(
     type: string,
     handler: EventHandler,
-    capture = false
+    capture = false,
   ) {
     this.bindingTable = this.bindingTable.filter(
       (d) =>
@@ -333,7 +345,7 @@ export abstract class SKElement {
           d.type == type &&
           d.handler == handler &&
           d.capture == capture
-        )
+        ),
     );
   }
 
@@ -366,7 +378,7 @@ export abstract class SKElement {
       this.x + this.margin,
       this.y + this.margin,
       this.paddingBox.width,
-      this.paddingBox.height
+      this.paddingBox.height,
     );
   }
 

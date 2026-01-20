@@ -145,12 +145,12 @@ function runLoop(eventQueue: FundamentalEvent[], time: number) {
       invalidateLayout();
     }
 
-    // widget dispatchers
+    // element tree dispatchers
     if (e instanceof SKMouseEvent && uiTreeRoot) {
       mouseDispatch(e, uiTreeRoot);
     }
-    if (e instanceof SKKeyboardEvent) {
-      keyboardDispatch(e);
+    if (e instanceof SKKeyboardEvent && uiTreeRoot) {
+      keyboardDispatch(e, uiTreeRoot);
     }
 
     // global app dispatch
@@ -195,7 +195,7 @@ const translators: EventTranslator[] = [
 function addSKEventTranslator(translator: EventTranslator) {
   translators.push(translator);
   console.log(
-    `added event translator, now ${translators.length} translators`
+    `added event translator, now ${translators.length} translators`,
   );
 }
 
@@ -236,7 +236,7 @@ function setSKDrawCallback(draw: DrawCallback) {
     return;
   }
   console.warn(
-    "setSKDrawCallback only for testing or concept demos: use setSKRoot to build an imperative UI."
+    "setSKDrawCallback only for testing or concept demos: use setSKRoot to build an imperative UI.",
   );
   drawCallback = draw;
 }
@@ -258,7 +258,7 @@ function setSKRoot(root: SKElement | null) {
     if (drawCallback) {
       drawCallback = null;
       console.warn(
-        `Draw callback cleared when setting widget tree root.`
+        `Draw callback cleared when setting widget tree root.`,
       );
     }
   }
@@ -276,7 +276,7 @@ function layoutRoot() {
     // no margin allowed on root
     if (uiTreeRoot.margin !== 0) {
       console.warn(
-        `No margin allowed for root widget, setting margin to 0.`
+        `No margin allowed for root widget, setting margin to 0.`,
       );
       uiTreeRoot.margin = 0;
     }
@@ -299,7 +299,7 @@ import { Settings } from "./settings";
  */
 function startSimpleKit(): boolean {
   console.info(
-    `🧰 SimpleKit v${npmPackage.version} *Imperative UI Mode* startup`
+    `🧰 SimpleKit v${npmPackage.version} *Imperative UI Mode* startup`,
   );
 
   // check the HTML document hosting SimpleKit

@@ -28,16 +28,34 @@ export class SKContainer extends SKElement {
   }
 
   addChild(element: SKElement) {
+    // no duplicates
+    if (this._children.includes(element)) {
+      throw new Error("Element is already a child of this container");
+    }
+
+    // no support for re-parenting
+    if (element.parent && element.parent !== this) {
+      throw new Error("Element already has a parent");
+    }
+
     this._children.push(element);
+    element._setParent(this);
     invalidateLayout();
   }
 
   removeChild(element: SKElement) {
+    if (!this._children.includes(element)) {
+      throw new Error("Element is not a child of this container");
+    }
+    element._setParent(null);
     this._children = this._children.filter((el) => el != element);
     invalidateLayout();
   }
 
   clearChildren() {
+    // clear parent refs of all children
+    this._children.forEach((el) => el._setParent(null));
+    // then clear the array
     this._children = [];
     invalidateLayout();
   }
@@ -97,7 +115,7 @@ export class SKContainer extends SKElement {
         0,
         0,
         this.paddingBox.width,
-        this.paddingBox.height
+        this.paddingBox.height,
       );
     }
 
@@ -109,7 +127,7 @@ export class SKContainer extends SKElement {
         0,
         0,
         this.paddingBox.width,
-        this.paddingBox.height
+        this.paddingBox.height,
       );
     }
 

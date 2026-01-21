@@ -319,8 +319,8 @@ export abstract class SKElement {
   protected sendEvent(e: SKEvent, capture = false): boolean {
     let handled = false;
     this.bindingTable.forEach((d) => {
-      if (d.type == e.type && d.capture == capture) {
-        handled ||= d.handler(e) as boolean;
+      if (d.type === e.type && d.capture === capture) {
+        handled ||= d.handler(e) === true;
       }
     });
     return handled;
@@ -353,20 +353,32 @@ export abstract class SKElement {
 
   //#region event handling
 
+  handleKeyboardEventCapture(ke: SKKeyboardEvent): boolean {
+    return this.sendEvent(ke, true);
+  }
+
   handleKeyboardEvent(ke: SKKeyboardEvent): boolean {
     return this.sendEvent(ke);
   }
 
+  handleMouseEventCapture(me: SKMouseEvent): boolean {
+    return this.sendEvent(me, true);
+  }
+
   handleMouseEvent(me: SKMouseEvent): boolean {
+    // every element can request keyboard focus on mousedown
     if (me.type === "mousedown") {
       requestKeyboardFocus();
     }
-
     return this.sendEvent(me);
   }
 
-  handleMouseEventCapture(me: SKMouseEvent): boolean {
-    return this.sendEvent(me, true);
+  handleSemanticEventCapture(se: SKEvent): boolean {
+    return this.sendEvent(se, true);
+  }
+
+  handleSemanticEvent(se: SKEvent): boolean {
+    return this.sendEvent(se);
   }
 
   //#endregion

@@ -56,12 +56,12 @@ export function keyboardDispatch(
   const route = target ? buildRoute(target) : [];
 
   // capture propagation (root -> target)
-  // const stopPropagation = route.some((element) => {
-  //   const handled = element.handleKeyboardEventCapture(ke);
-  //   return handled;
-  // });
+  const stopPropagation = route.some((element) => {
+    const handled = element.handleKeyboardEventCapture(ke);
+    return handled;
+  });
 
-  // if (stopPropagation) return;
+  if (stopPropagation) return;
 
   // bubble propagation (target -> root)
   [...route].reverse().some((element) => {

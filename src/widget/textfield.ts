@@ -1,6 +1,6 @@
-import { SKKeyboardEvent, SKMouseEvent } from "../events";
+import { SKEvent, SKKeyboardEvent, SKMouseEvent } from "../events";
 import { measureText } from "../utility";
-import { requestKeyboardFocus } from "../dispatch";
+import { requestKeyboardFocus, semanticDispatch } from "../dispatch";
 import { SKElement, type SKElementProps } from "./element";
 import { Style } from "./style";
 
@@ -42,7 +42,7 @@ export class SKTextfield extends SKElement {
 
     if (!m) {
       console.warn(
-        `measureText failed in SKTextfield for ${this.text}`
+        `measureText failed in SKTextfield for ${this.text}`,
       );
       return;
     }
@@ -63,26 +63,44 @@ export class SKTextfield extends SKElement {
     } else return text;
   }
 
+  private textOnFocus = "";
+
   handleKeyboardEvent(ke: SKKeyboardEvent) {
     switch (ke.type) {
-      case "focusout":
-        this.focus = false;
-        break;
       case "focusin":
         this.focus = true;
+        this.textOnFocus = this.text;
+        break;
+      case "focusout":
+        this.focus = false;
+        if (this.text !== this.textOnFocus) {
+          semanticDispatch(
+            {
+              source: this,
+              timeStamp: ke.timeStamp,
+              type: "change",
+            } as SKEvent,
+            this,
+          );
+        }
         break;
       case "keydown":
         if (this.focus && ke.key) {
-          this.text = this.applyEdit(this.text, ke.key);
+          const next = this.applyEdit(this.text, ke.key);
+
+          if (next != this.text) {
+            this.text = next;
+
+            semanticDispatch(
+              {
+                source: this,
+                timeStamp: ke.timeStamp,
+                type: "input",
+              } as SKEvent,
+              this,
+            );
+          }
         }
-        if (
-          this.sendEvent({
-            source: this,
-            timeStamp: ke.timeStamp,
-            type: "textchanged",
-          })
-        )
-          return true;
         break;
     }
 

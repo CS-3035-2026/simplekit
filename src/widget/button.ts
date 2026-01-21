@@ -3,7 +3,7 @@ import { SKElement, type SKElementProps } from "./element";
 import { Style } from "./style";
 import { SKEvent, SKMouseEvent } from "../events";
 
-import { requestMouseFocus } from "../dispatch";
+import { requestMouseFocus, semanticDispatch } from "../dispatch";
 
 export type SKButtonProps = SKElementProps & { text?: string };
 
@@ -64,15 +64,14 @@ export class SKButton extends SKElement {
         break;
       case "mouseup":
         this.state = "hover";
-        // return true if a listener was registered
-        if (
-          this.sendEvent({
+        semanticDispatch(
+          {
             source: this,
             timeStamp: me.timeStamp,
             type: "action",
-          } as SKEvent)
-        )
-          return true;
+          } as SKEvent,
+          this,
+        );
         break;
       case "mouseenter":
         this.state = "hover";

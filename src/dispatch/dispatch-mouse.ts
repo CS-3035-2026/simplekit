@@ -37,8 +37,12 @@ function findTarget(
  * @param root the element tree root
  */
 export function mouseDispatch(me: SKMouseEvent, root: SKElement) {
-  // target is focused element if set, otherwise front-most element under mouse
-  const target = focusedElement ?? findTarget(me.x, me.y, root);
+  // target is:
+  // focused element if set,
+  // otherwise front-most element under mouse,
+  // otherwise root if no target found
+  const target =
+    focusedElement ?? findTarget(me.x, me.y, root) ?? root;
 
   // build the route from root to the target
   const route = target ? buildRoute(target) : [];

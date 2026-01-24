@@ -3,6 +3,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-01-23
+
 ### Breaking changes
 - Renamed `SKTextfield` event from `changed` to `change`
 - Corrected `change` event timing so it is emitted after text editing completes (on focus loss), aligning with HTML DOM semantics

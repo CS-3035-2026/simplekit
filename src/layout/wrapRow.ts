@@ -22,13 +22,13 @@ export class WrapRowLayout implements LayoutMethod {
     // find the widest element
     const minWidth = elements.reduce(
       (acc, el) => Math.max(acc, el.intrinsicWidth),
-      0
+      0,
     );
 
     // find the tallest element
     const minHeight = elements.reduce(
       (acc, el) => Math.max(acc, el.intrinsicHeight),
-      0
+      0,
     );
 
     // return minimum layout size
@@ -69,14 +69,14 @@ export class WrapRowLayout implements LayoutMethod {
       x += el.intrinsicWidth + this.gap;
 
       // update bounds that were actually used
-      newBounds.width = Math.max(newBounds.width, el.intrinsicWidth);
+      newBounds.width = Math.max(newBounds.width, x - this.gap);
       newBounds.height = Math.max(newBounds.height, y + rowHeight);
     });
 
     // warn if rows of elements overflow
     if (Settings.layoutWarnings && newBounds.height > height) {
       console.warn(
-        `${(newBounds.height - height).toFixed(1)} vertical overflow`
+        `${(newBounds.height - height).toFixed(1)} vertical overflow`,
       );
     }
 

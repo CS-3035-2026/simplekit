@@ -28,7 +28,11 @@ export * from "./layout";
 // settings
 export * from "./settings";
 // dispatch
-export { requestKeyboardFocus, requestMouseFocus } from "./dispatch";
+export {
+  requestKeyboardFocus,
+  requestMouseFocus,
+  semanticDispatch,
+} from "./dispatch";
 
 //  - - - - - - - - - - - - - - - - - - - - - - -
 

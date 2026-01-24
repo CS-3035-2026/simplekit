@@ -23,7 +23,7 @@ export interface FundamentalEvent {
 // TODO: FundamentalEvent type could better
 
 function createFundamentalEvent(
-  domEvent: Event
+  domEvent: Event,
 ): FundamentalEvent | undefined {
   if (domEvent.type == "resize") {
     return {
@@ -54,7 +54,7 @@ function createFundamentalEvent(
     };
   } else {
     console.warn(
-      `event ${domEvent.type} not supported as FundamentalEvent`
+      `event ${domEvent.type} not supported as FundamentalEvent`,
     );
     return;
   }
@@ -68,7 +68,7 @@ function createFundamentalEvent(
  */
 export type RunLoopHandler = (
   eventQueue: FundamentalEvent[],
-  time: DOMHighResTimeStamp
+  time: DOMHighResTimeStamp,
 ) => void;
 
 /**
@@ -99,7 +99,7 @@ export function createWindowingSystem(runLoop: RunLoopHandler) {
 
   // push a resize event to send on first frame of run loop
   const initialResizeEvent = createFundamentalEvent(
-    new Event("resize")
+    new Event("resize"),
   );
   if (initialResizeEvent) eventQueue.push(initialResizeEvent);
 

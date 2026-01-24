@@ -280,6 +280,13 @@ function layoutRoot() {
       );
       uiTreeRoot.margin = 0;
     }
+    if (uiTreeRoot.x !== 0 || uiTreeRoot.y !== 0) {
+      console.warn(
+        `Root widget x and y must be 0, setting x and y to 0.`,
+      );
+      uiTreeRoot.x = 0;
+      uiTreeRoot.y = 0;
+    }
 
     // 1. calculate ”intrinsic size" of all widgets
     uiTreeRoot.measure();

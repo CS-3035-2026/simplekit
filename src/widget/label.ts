@@ -49,6 +49,14 @@ export class SKLabel extends SKElement {
     this.sizeChanged();
   }
 
+  protected _fontColour = Style.fontColour;
+  get fontColour() {
+    return this._fontColour;
+  }
+  set fontColour(c: string) {
+    this._fontColour = c;
+  }
+
   align: LabelAlign;
 
   protected _text = "";
@@ -127,7 +135,7 @@ export class SKLabel extends SKElement {
 
     // render text
     gc.font = this.font;
-    gc.fillStyle = "black";
+    gc.fillStyle = this._fontColour;
     gc.textBaseline = "middle";
 
     // clipping rectangle

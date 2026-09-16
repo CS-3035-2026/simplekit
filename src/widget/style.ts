@@ -6,6 +6,7 @@ export const Style = {
   widgetHeight: 32,
   defaultColour: "lightgrey",
   highlightColour: "lightskyblue",
+  fontColour: "black",
   focusColour: "mediumblue",
   minElementSize: 32,
 };

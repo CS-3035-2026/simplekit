@@ -30,6 +30,22 @@ export class SKButton extends SKElement {
     this.sizeChanged();
   }
 
+  protected _radius = 4;
+  get radius() {
+    return this._radius;
+  }
+  set radius(r: number) {
+    this._radius = r;
+  }
+
+  protected _fontColour = Style.fontColour;
+  get fontColour() {
+    return this._fontColour;
+  }
+  set fontColour(c: string) {
+    this._fontColour = c;
+  }
+
   protected _text = "";
   get text() {
     return this._text;
@@ -98,7 +114,7 @@ export class SKButton extends SKElement {
     // thick highlight rect
     if (this.state == "hover" || this.state == "down") {
       gc.beginPath();
-      gc.roundRect(this.x, this.y, w, h, 4);
+      gc.roundRect(this.x, this.y, w, h, this._radius);
       gc.strokeStyle = Style.highlightColour;
       gc.lineWidth = 8;
       gc.stroke();
@@ -106,7 +122,7 @@ export class SKButton extends SKElement {
 
     // normal background
     gc.beginPath();
-    gc.roundRect(this.x, this.y, w, h, 4);
+    gc.roundRect(this.x, this.y, w, h, this._radius);
     gc.fillStyle =
       this.state == "down" ? Style.highlightColour : this.fill;
     gc.strokeStyle = this.border;
@@ -118,7 +134,7 @@ export class SKButton extends SKElement {
 
     // button label
     gc.font = this._font;
-    gc.fillStyle = this.border;
+    gc.fillStyle = this._fontColour;
     gc.textAlign = "center";
     gc.textBaseline = "middle";
     gc.fillText(this.text, this.x + w / 2, this.y + h / 2);

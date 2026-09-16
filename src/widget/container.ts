@@ -20,6 +20,14 @@ export class SKContainer extends SKElement {
         : new Layout.FixedLayout();
   }
 
+  protected _radius = 0;
+  get radius() {
+    return this._radius;
+  }
+  set radius(r: number) {
+    this._radius = r;
+  }
+
   //#region managing children
 
   protected _children: SKElement[] = [];
@@ -110,25 +118,31 @@ export class SKContainer extends SKElement {
 
     // draw background colour if set
     if (this.fill) {
-      gc.fillStyle = this.fill;
-      gc.fillRect(
+      gc.beginPath();
+      gc.roundRect(
         0,
         0,
         this.paddingBox.width,
         this.paddingBox.height,
+        this._radius,
       );
+      gc.fillStyle = this.fill;
+      gc.fill();
     }
 
     // draw border if set
     if (this.border) {
-      gc.strokeStyle = this.border;
-      gc.lineWidth = 1;
-      gc.strokeRect(
+      gc.beginPath();
+      gc.roundRect(
         0,
         0,
         this.paddingBox.width,
         this.paddingBox.height,
+        this._radius,
       );
+      gc.strokeStyle = this.border;
+      gc.lineWidth = 1;
+      gc.stroke();
     }
 
     gc.restore();

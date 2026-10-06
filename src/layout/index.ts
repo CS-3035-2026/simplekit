@@ -26,7 +26,7 @@ export function sizeToString(
 
 // using strategy pattern for swapping layout methods
 export interface LayoutMethod {
-  measure: (elements: SKElement[]) => Size;
+  measure: (elements: SKElement[], width?: number) => Size;
   layout: (
     width: number,
     height: number,

@@ -81,7 +81,11 @@ export class SKContainer extends SKElement {
 
   measure(): void {
     if (this._children.length > 0) {
-      const size = this._layoutMethod.measure(this._children);
+      const contentWidth =
+        this.width === undefined
+          ? undefined
+          : Math.max(this.width, 2 * this.padding) - 2 * this.padding;
+      const size = this._layoutMethod.measure(this._children, contentWidth);
       this.contentWidth = size.width;
       this.contentHeight = size.height;
     } else {

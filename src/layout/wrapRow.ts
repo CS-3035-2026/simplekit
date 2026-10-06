@@ -13,23 +13,40 @@ export class WrapRowLayout implements LayoutMethod {
 
   private gap: number;
 
-  measure(elements: SKElement[]) {
+  measure(elements: SKElement[], width?: number) {
     // measure all children first
     elements.forEach((el) => {
       el.measure();
     });
 
-    // find the widest element
-    const minWidth = elements.reduce(
-      (acc, el) => Math.max(acc, el.intrinsicWidth),
-      0,
-    );
+    // measure the natural single-row width
+    const minWidth =
+      elements.reduce((acc, el) => acc + el.intrinsicWidth, 0) +
+      Math.max(0, elements.length - 1) * this.gap;
 
-    // find the tallest element
-    const minHeight = elements.reduce(
-      (acc, el) => Math.max(acc, el.intrinsicHeight),
-      0,
-    );
+    let minHeight = 0;
+    if (width === undefined) {
+      minHeight = elements.reduce(
+        (acc, el) => Math.max(acc, el.intrinsicHeight),
+        0,
+      );
+    } else {
+      let x = 0;
+      let y = 0;
+      let rowHeight = 0;
+
+      elements.forEach((el) => {
+        if (x > 0 && x + el.intrinsicWidth > width) {
+          y += rowHeight + this.gap;
+          x = 0;
+          rowHeight = 0;
+        }
+
+        rowHeight = Math.max(rowHeight, el.intrinsicHeight);
+        x += el.intrinsicWidth + this.gap;
+        minHeight = Math.max(minHeight, y + rowHeight);
+      });
+    }
 
     // return minimum layout size
     return {
@@ -50,10 +67,10 @@ export class WrapRowLayout implements LayoutMethod {
       el.layout(el.intrinsicWidth, el.intrinsicHeight);
 
       if (Settings.layoutWarnings && el.intrinsicWidth > width) {
-        // warn if element overflows
         console.warn(`element ${el.toString()} horizontal overflow`);
-      } else if (x + el.intrinsicWidth > width) {
-        // wrap to next row and clear rowHeight
+      }
+
+      if (x > 0 && x + el.intrinsicWidth > width) {
         x = 0;
         y += rowHeight + this.gap;
         rowHeight = 0;

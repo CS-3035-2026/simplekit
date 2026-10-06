@@ -115,6 +115,14 @@ export class SKTextfield extends SKElement {
               } as SKEvent,
               this,
             );
+            semanticDispatch(
+              {
+                source: this,
+                timeStamp: ke.timeStamp,
+                type: "textchanged",
+              } as SKEvent,
+              this,
+            );
           }
         }
         break;

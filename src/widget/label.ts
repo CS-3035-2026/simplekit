@@ -57,6 +57,14 @@ export class SKLabel extends SKElement {
     this._fontColour = c;
   }
 
+  protected _radius = 0;
+  get radius() {
+    return this._radius;
+  }
+  set radius(r: number) {
+    this._radius = r;
+  }
+
   align: LabelAlign;
 
   protected _text = "";
@@ -122,26 +130,26 @@ export class SKLabel extends SKElement {
     gc.translate(this.x, this.y);
     gc.translate(this.margin, this.margin);
 
+    gc.beginPath();
+    gc.roundRect(0, 0, w, h, this._radius);
+
     if (this.fill) {
       gc.fillStyle = this.fill;
-      gc.fillRect(0, 0, w, h);
+      gc.fill();
     }
 
     if (this.border) {
       gc.strokeStyle = this.border;
       gc.lineWidth = 1;
-      gc.strokeRect(0, 0, w, h);
+      gc.stroke();
     }
+
+    gc.clip(); // clip text to the (rounded) label box
 
     // render text
     gc.font = this.font;
     gc.fillStyle = this._fontColour;
     gc.textBaseline = "middle";
-
-    // clipping rectangle
-    gc.beginPath();
-    gc.rect(0, 0, w, h);
-    gc.clip();
 
     switch (this.align) {
       case "left":
